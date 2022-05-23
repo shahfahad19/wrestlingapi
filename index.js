@@ -6,10 +6,6 @@ const cheerio = require("cheerio");
 const app = express();
 const cors = require("cors");
 app.use(cors({origin: "*"}));
-// const app = express();
-
-//js files
-const showslist = require("./getShows");
 
 // use the express-static middleware
 app.use(express());
@@ -102,7 +98,6 @@ app.get("/videos", (req, res) => {
 
 // define the first route
 app.get("/", function (req, res) {
-	let url = "";
 	res.send("<p>APIs under construction</p> ");
 });
 
