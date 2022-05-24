@@ -6,10 +6,6 @@ const cheerio = require("cheerio");
 const app = express();
 const cors = require("cors");
 app.use(cors({origin: "*"}));
-// const app = express();
-
-//js files
-const showslist = require("./getShows");
 
 // use the express-static middleware
 app.use(express());
@@ -35,7 +31,7 @@ app.get("/shows", (req, res) => {
 					let title = $(item).children("div").children(".entry-body").children("h3").children("a").text();
 					let image = $(item).children("div").children(".entry-image").children("a").children("picture").children("img").attr("data-src");
 
-
+					link = link.replaceAll(" ", "%20");
 					if(title.includes("WWE") || title.includes("AEW")) {
 						shows.push({
 							title: title,
@@ -55,9 +51,8 @@ app.get("/shows", (req, res) => {
 
 
 app.get("/videos", (req, res) => {
-	const url = req.query.url || "";
-
-
+	const url = req.query.url.replaceAll(" ", "%20") || "";
+	
 	//Getting the url shortner page
 	request(url, function (error, response, html) {
 		let shows = [];
@@ -102,8 +97,7 @@ app.get("/videos", (req, res) => {
 
 // define the first route
 app.get("/", function (req, res) {
-	let url = "";
-	res.send("<p>APIs under construction</p> ");
+	res.send("<p>Api is working!</p> ");
 });
 
 // start the server listening for requests

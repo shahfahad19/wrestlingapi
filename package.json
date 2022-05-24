@@ -4,7 +4,7 @@
   "description": "A website to watch wrestling shows",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "nodemon index.js"
   },
   "author": "Shah Fahad",
   "license": "ISC",
