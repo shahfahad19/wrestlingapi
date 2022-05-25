@@ -17,16 +17,23 @@
 
 <body>
 	<div class="h2 text-center my-3">Watch Wrestling </div>
-	<!-- Main Content Here -->
+	<!-- Shows  Section -->
 	<div id="main" class="row m-1 shadow">
-
+		<!-- All the shows will be in this div -->
 	</div>
-	<button id="more" class="btn btn-primary" onclick="loadData()">Load More</button>
+
+	<div id="more" class="text-center">
+		<button class="btn btn-primary btn-sm m-2 mb-5 shadow" onclick="loadData()">Load More</button>
+	</div>
+	<!-- Shows Section Ended -->
+
+
+	<!-- Video Section -->
 	<div id="vid" class="text-center">
 		<div id="back" class="d-block text-left mb-2">
-			<button class="btn btn-danger " onclick="goBack()">Back</button>
+			<button class="btn btn-danger rounded-0 m-2 shadow" onclick="goBack()">Back</button>
 		</div>
-		<div id="video">
+		<div id="video" class="m-2">
 			<div id="playerContainer"></div>
 		</div>
 		<div id="qualities" class="m-2 mt-5"><button class="btn btn-sm btn-warning" id="sd">480p</button>

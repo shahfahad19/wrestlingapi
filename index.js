@@ -13,9 +13,10 @@ app.use(express());
 //routing
 
 app.get("/shows", (req, res) => {
-	const page = req.query.page || "1";
+	let page = req.query.page || "1";
+	page = parseInt(page) * 2;
 	console.log(page);
-	const url =
+	let url =
 		"https://akwam.to/shows?page="+page
 
 	request(url, function (error, response, html) {
@@ -26,33 +27,60 @@ app.get("/shows", (req, res) => {
 			$(".widget-body")
 				.children()
 				.each(function (index, item) {
-
 					let link = $(item).children("div").children(".entry-body").children("h3").children("a").attr("href");
 					let title = $(item).children("div").children(".entry-body").children("h3").children("a").text();
 					let image = $(item).children("div").children(".entry-image").children("a").children("picture").children("img").attr("data-src");
+					title = title.includes("Smackdown") ? title.replace("Friday ", "").replace("Night ", "") : title;
+					title = title.includes("Raw") ? title.replace("Monday ", "").replace("Night ", "") : title;
 
-					link = link.replaceAll(" ", "%20");
 					if(title.includes("WWE") || title.includes("AEW")) {
 						shows.push({
 							title: title,
 							image: image,
 							link: link
 						})
-
 					}
+				});
+			url = "https://akwam.to/shows?page=" + (page + 1);
+			request(url, function (error, response, html) {
+				if (!error) {
+					var $ = cheerio.load(html);
+					data = $(".widget-body").html();
+					$(".widget-body")
+						.children()
+						.each(function (index, item) {
+							let link = $(item).children("div").children(".entry-body").children("h3").children("a").attr("href");
+							let title = $(item).children("div").children(".entry-body").children("h3").children("a").text();
+							let image = $(item).children("div").children(".entry-image").children("a").children("picture").children("img").attr("data-src");
+							title = title.includes("Smackdown") ? title.replace("Friday ", "").replace("Night ", "") : title;
+							title = title.includes("Raw") ? title.replace("Monday ", "").replace("Night ", "") : title;
 
+							if (title.includes("WWE") || title.includes("AEW")) {
+								shows.push({
+									title: title,
+									image: image,
+									link: link
+								})
+							}
+						});
+					res.send(shows);
+					
+				}
 			});
-			res.send(shows);
-
-			
 		}
 	});
 });
-
+//document.querySelector("#show-episodes > div > div > div:nth-child(5) > div > div > a")
 
 app.get("/videos", (req, res) => {
-	const url = req.query.url.replaceAll(" ", "%20") || "";
-	
+	let url = req.query.url.replaceAll(" ", "%20") || "";
+	let src = url;
+	if (src.includes("nxt")){
+		src = src.replace(/[0-9]/g, ''). replace('https://akwam.to/shows/', '').replace("/wwe-nxt", "");
+		url = url.replace(src[0], "%20"); 
+	}
+
+	console.log(url);
 	//Getting the url shortner page
 	request(url, function (error, response, html) {
 		let shows = [];
@@ -62,6 +90,7 @@ app.get("/videos", (req, res) => {
 
 			console.log("1/3");
 			//Getting Video Page
+			console.log(link);
 			request(link, function (error, response, html) {
 				let shows = [];
 				if (!error) {
@@ -101,4 +130,7 @@ app.get("/", function (req, res) {
 });
 
 // start the server listening for requests
-app.listen(process.env.PORT || 9000, () => console.log("Server is running..."));
+app.listen(process.env.PORT || 9000, () => {
+	console.clear();
+	console.log("Server is running...")
+});

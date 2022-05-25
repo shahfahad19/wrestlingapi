@@ -1,53 +1,64 @@
-window.onload = function() {
-     loadData();
-     $("#back").hide();
+window.onload = function () {
+	Swal.fire({
+		html: 'Loading the shows',
+		allowOutsideClick: false,
+		didOpen: () => {
+			Swal.showLoading()
+		}
+	})
+    loadData();
+    $("#back").hide();
 	$("#vid").hide();
-	let timerInterval;
 }
 let page =0;
 
-const loadData=() =>{
+const loadData = () => {
 	page++;
 	$("#more").hide();
 	$.ajax({
-		url: "https://wrestlingapi.vercel.app/shows?page="+page,
-			success: function(data){
+		url: "http://localhost:9000/shows?page="+page,
+		success: function (data) {
+				Swal.close();
 		    	$("#more").show();
 				showData(data);
 			},
 			error: function(){
-				alert("Something went wrong");
-			}
+				Swal.fire({
+				icon: 'error',
+				text: 'Something went wrong!',
+			})
+		}
+		
 	});
 } 
 
 const showData = (data) => {
 	$("#playerContainer").html("");
 	for (let i = 0; i<data.length;i++) {
-		$('#main').append(`<div class="tile col-6 col-sm-4 col-md-3 col-lg-2 p-1 border" onclick="startPlayer('${data[i].link}', '${data[i].image})')">
-			<img class="w-100" src="${data[i].image}" />
-			<p>${data[i].title}</p>
-			</div>`);
+		$('#main').append(`
+			<div class="col-6 col-sm-4 col-md-3 col-lg-2 px-1">
+				<div class="" onclick="startPlayer('${data[i].link}', '${data[i].image}', '${data[i].title}')">
+					<img class="w-100 rounded" src="${data[i].image}" />
+					<p class="font-weight-bold text-sm px-1">${data[i].title}</p>
+				</div>
+			</div>
+			`);
 	}
 }
 
-const startPlayer = (src, img) => {
-let src2 = src;
-if (src2.includes("nxt")){
-		src2 = src2.replace(/[0-9]/g, ''). replace('https://akwam.to/shows/', '').replace("/wwe-nxt", "");
-		src = src.replace(src2[0], "%20"); 
-	} 
+const startPlayer = (src, img, title) => {
+	title = title.replace(/[0-9]/g, '').replaceAll('.', '').replaceAll('  ', '');
 	Swal.fire({
-		title: 'Loading',
-		html: 'Please wait. The video is loading!',
+		html: 'Loading '+ title,
 		allowOutsideClick: false,
 		didOpen: () => {
 			Swal.showLoading()
 		}
 	})
 	$.ajax({
-		url: "https://wrestlingapi.vercel.app/videos?url="+src,
-		success: function(data){
+		url: "http://localhost:9000/videos?url="+src,
+		success: function (data) {
+			window.scrollTo(0,0);
 			$("#vid").show();
 			$("#main").hide();
 			$("#more").hide();
