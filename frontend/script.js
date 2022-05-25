@@ -16,7 +16,7 @@ const loadData = () => {
     page++;
     $("#more").hide();
     $.ajax({
-        url: "https://wrestlingapi.vercela.app/?page=" + page,
+        url: "https://wrestlingapi.vercel.app/?page=" + page,
         success: function (data) {
             Swal.close();
             $("#more").show();
