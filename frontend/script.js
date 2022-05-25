@@ -32,6 +32,7 @@ const showData = (data) => {
 }
 
 const startPlayer = (src, img) => {
+let src2 = src;
 if (src2.includes("nxt")){
 		src2 = src2.replace(/[0-9]/g, ''). replace('https://akwam.to/shows/', '').replace("/wwe-nxt", "");
 		src = src.replace(src2[0], "%20"); 
