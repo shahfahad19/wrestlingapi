@@ -65,22 +65,8 @@ const startPlayer = (src, img, title) => {
             $("#main").hide();
             $("#more").hide();
             Swal.close();
-            let source =
-                data.videos.length == 1
-                    ? data.videos[0].link
-                    : data.videos[1].link;
 
-            if (data.videos.length == 1) {
-                $("#qualities").hide();
-            } else {
-                $("#sd").attr("onclick", `playVideo('${data.videos[1].link}')`);
-                $("#sd").attr(data.videos[1].size);
-
-                $("#hd").attr("onclick", `playVideo('${data.videos[0].link}')`);
-                $("#hd").attr(data.videos[0].size);
-            }
-
-            playVideo(source);
+            playVideo(data.videos, img);
         },
         error: function (err) {
             Swal.close();
@@ -93,21 +79,29 @@ const startPlayer = (src, img, title) => {
     });
 };
 
-const playVideo = (video) => {
-    $("#dl").attr("href", video);
-    $("#playerContainer").html("");
-    const config = {
-        autoplay: true,
-        sources: [
-            {
-                type: "mp4",
-                src: video,
-            },
-        ],
-    };
-
-    const element = document.getElementById("playerContainer");
-    const player = IndigoPlayer.init(element, config);
+const playVideo = (videos, img) => {
+    if (videos.length == 2) {
+        $("#plyr-container").html(`
+            <video id="plyr" playsinline controls data-poster="${img}">
+                <source src="${videos[1].link}" type="video/mp4" size="${videos[1].size}" />
+                <source src="${videos[0].link}" type="video/mp4" size="${videos[0].size}" />
+            </video>
+        `);
+        $("#download-btns").html(`
+            <a href="${videos[1].link}" class="btn btn-primary btn-sm m-2" target="_blank">Download (${videos[1].size}p)</a>
+            <a href="${videos[0].link}" class="btn btn-primary btn-sm m-2" target="_blank">Download (${videos[0].size}p)</a>
+            `);
+    } else {
+        $("#plyr-container").html(`
+            <video id="plyr" playsinline controls data-poster="${img}">
+                <source src="${videos[0].link}" type="video/mp4" size="${videos[0].size}" />
+            </video>
+        `);
+        $("#download-btns").html(`
+            <a href="${videos[0].link}" class="btn btn-primary btn-sm m-2" target="_blank">Download (${videos[0].size}p)</a>
+            `);
+    }
+    const player = new Plyr("#plyr");
 };
 
 const goBack = () => {

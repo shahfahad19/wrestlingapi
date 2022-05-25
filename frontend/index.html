@@ -14,19 +14,25 @@
             type="text/javascript"
             src="https://code.jquery.com/jquery-3.6.0.min.js"
         ></script>
-        <script src="./script.js" defer></script>
-        <script
-            src="https://cdn.jsdelivr.net/npm/indigo-player@1/lib/indigo-player.js"
-            defer
-        ></script>
+        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
+        <script src="./script.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.all.min.js"
             defer
         ></script>
+        <style>
+            .plyr {
+                width: 600px;
+                display: inline-block;
+            }
+        </style>
     </head>
 
     <body>
-        <div class="h2 text-center my-3">Watch Wrestling</div>
+        <div class="h2 text-center my-3 font-weight-bold">
+            <span class="text-danger">Watch</span>
+            <span class="text-dark">Wrestling</span>
+        </div>
         <!-- Shows  Section -->
         <div id="main" class="row m-1 shadow">
             <!-- All the shows will be in this div -->
@@ -52,16 +58,9 @@
                     Back
                 </button>
             </div>
-            <div id="video" class="m-2">
-                <div id="playerContainer"></div>
-            </div>
-            <div id="qualities" class="m-2 mt-5">
-                <button class="btn btn-sm btn-warning" id="sd">480p</button>
-                <button class="btn btn-sm btn-success" id="hd">720p</button>
-            </div>
-            <a class="btn btn-primary btn-primary shadow-sm m-2" id="dl"
-                >Download</a
-            >
+            <div id="plyr-container" class="m-2 text-center"></div>
+            <div id="download-btns"></div>
         </div>
+        <script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
     </body>
 </html>
