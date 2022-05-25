@@ -52,13 +52,9 @@ app.get("/shows", (req, res) => {
 
 app.get("/videos", (req, res) => {
 	const url = req.query.url.replaceAll(" ", "%20") || "";
-	let src2 = url;
-	if (src2.includes("nxt")){
-		src2 = src2.replace(/[0-9]/g, ''). replace('https://akwam.to/shows/', '').replace("/wwe-nxt", "");
-		src = src.replace(src2[0], "%20"); 
-	} 
+	
 	//Getting the url shortner page
-	request(src2, function (error, response, html) {
+	request(url, function (error, response, html) {
 		let shows = [];
 		if (!error) {
 			var $ = cheerio.load(html);
