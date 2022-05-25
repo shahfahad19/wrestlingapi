@@ -16,7 +16,7 @@ const loadData = () => {
     page++;
     $("#more").hide();
     $.ajax({
-        url: "https://wrestlingapi.vercel.app/?page=" + page,
+        url: "https://watchwrestling.vercel.app/shows/?page=" + page,
         success: function (data) {
             Swal.close();
             $("#more").show();
@@ -37,7 +37,7 @@ const showData = (data) => {
         $("#main").append(`
 			<div class="col-6 col-sm-4 col-md-3 col-lg-2 px-1">
 				<div class="" onclick="startPlayer('${data[i].link}', '${data[i].image}', '${data[i].title}')">
-					<img class="w-100 rounded" src="${data[i].image}" />
+					<img class="w-100 rounded-lg img-fluid" style="height:250px" src="${data[i].image}" />
 					<p class="font-weight-bold text-sm px-1">${data[i].title}</p>
 				</div>
 			</div>
@@ -58,7 +58,7 @@ const startPlayer = (src, img, title) => {
         },
     });
     $.ajax({
-        url: "https://wrestlingapi.vercel.app/watch?v=" + src,
+        url: "https://watchwrestling.vercel.app/watch?v=" + src,
         success: function (data) {
             window.scrollTo(0, 0);
             $("#vid").show();

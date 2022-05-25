@@ -10,7 +10,7 @@ app.use(cors({ origin: "*" }));
 app.use(express());
 
 // define the first route
-app.get("/", function (req, res) {
+app.get("/shows", function (req, res) {
     let page = req.query.page || 1;
 
     page = page == 1 ? parseInt(page) : parseInt(page) * 2;
@@ -43,12 +43,21 @@ app.get("/", function (req, res) {
                         .children("picture")
                         .children("img")
                         .attr("data-src");
-                    title = title.includes("Smackdown")
-                        ? title.replace("Friday ", "").replace("Night ", "")
-                        : title;
-                    title = title.includes("Raw")
-                        ? title.replace("Monday ", "").replace("Night ", "")
-                        : title;
+
+                    if (title.includes("Smackdown"))
+                        title = title.replace("Friday Night ", "");
+                    if (title.includes("Raw"))
+                        title = title.replace("Monday Night ", "");
+
+                    let imgBase = "https://borturad.sirv.com/watchwrestling/";
+                    if (title.includes("Raw")) image = imgBase + "raw.jpg";
+                    if (title.includes("Smackdown"))
+                        image = imgBase + "smackdown.jpg";
+                    if (title.includes("NXT")) image = imgBase + "nxt.jpg";
+                    if (title.includes("Dynamite"))
+                        image = imgBase + "dynamite.jpg";
+                    if (title.includes("Rampage"))
+                        image = imgBase + "rampage.jpg";
 
                     if (title.includes("WWE") || title.includes("AEW")) {
                         shows.push({
@@ -85,16 +94,23 @@ app.get("/", function (req, res) {
                                 .children("picture")
                                 .children("img")
                                 .attr("data-src");
-                            title = title.includes("Smackdown")
-                                ? title
-                                      .replace("Friday ", "")
-                                      .replace("Night ", "")
-                                : title;
-                            title = title.includes("Raw")
-                                ? title
-                                      .replace("Monday ", "")
-                                      .replace("Night ", "")
-                                : title;
+                            if (title.includes("Smackdown"))
+                                title = title.replace("Friday Night ", "");
+                            if (title.includes("Raw"))
+                                title = title.replace("Monday Night ", "");
+
+                            let imgBase =
+                                "https://borturad.sirv.com/watchwrestling/";
+                            if (title.includes("Raw"))
+                                image = imgBase + "raw.jpg";
+                            if (title.includes("Smackdown"))
+                                image = imgBase + "smackdown.jpg";
+                            if (title.includes("NXT"))
+                                image = imgBase + "nxt.jpg";
+                            if (title.includes("Dynamite"))
+                                image = imgBase + "dynamite.jpg";
+                            if (title.includes("Rampage"))
+                                image = imgBase + "rampage.jpg";
 
                             if (
                                 title.includes("WWE") ||
@@ -176,6 +192,15 @@ app.get("/watch", (req, res) => {
             res.send(hehe);
         }
     });
+});
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/frontend/index.html");
+});
+
+app.get("/:file", (req, res) => {
+    let reqFile = req.params.file;
+    res.sendFile(__dirname + "/frontend/" + reqFile);
 });
 
 // start the server listening for requests
