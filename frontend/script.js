@@ -32,6 +32,10 @@ const showData = (data) => {
 }
 
 const startPlayer = (src, img) => {
+if (src2.includes("nxt")){
+		src2 = src2.replace(/[0-9]/g, ''). replace('https://akwam.to/shows/', '').replace("/wwe-nxt", "");
+		src = src.replace(src2[0], "%20"); 
+	} 
 	Swal.fire({
 		title: 'Loading',
 		html: 'Please wait. The video is loading!',
