@@ -25,7 +25,7 @@ const loadData = () => {
         error: function () {
             Swal.fire({
                 icon: "error",
-                text: "Something went wrong!",
+                text: "Something went wrong",
             });
         },
     });
