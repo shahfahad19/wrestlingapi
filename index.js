@@ -255,7 +255,7 @@ app.get("/download/:domain/:link/:name", (req, res) => {
     let link = req.params.link.replace("~", "/");
     let name = req.params.name;
     let url = "http://" + domain + ".akwam.link/download/" + link + "/" + name;
-    request(url).pipe(res);
+    res.redirect(url);
 });
 
 
