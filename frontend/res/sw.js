@@ -1,18 +1,11 @@
 // Choose a cache name
-const cacheName = "watch-wrestling-cache";
+const cacheName = "watch-wrestling-cachev2";
 // List the files to precache
 const precacheResources = [
     "/",
     "/index.html",
     "/res/script.js",
-    "/imgs/192.png",
-    "/imgs/384.png",
-    "/imgs/256.png",
-    "/imgs/512.png",
-    "https://code.jquery.com/jquery-3.6.0.min.js",
-    "https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.all.min.js",
-    "/res/plyr.css",
-    "/res/plyr.js",
+    "/imgs/logo.png"
 ];
 
 // When the service worker is installing, open the cache and add the precache resources to it
