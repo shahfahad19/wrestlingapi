@@ -17,7 +17,8 @@ app.get("/", (req, res) => {
 // define the first route
 app.get("/shows", function (req, res) {
     let ref = req.headers.referer || "REFERRER";
-    if (ref.includes("gjhfjgjhgjhgjhgjhgh")) {
+    let ver = req.query.ver;
+    if (!ref.includes("watchwrestling.vercel.app") && ver != "admin") {
         res.sendStatus(403);
     } else {
         let page = req.query.page || 1;
@@ -160,68 +161,115 @@ app.get("/shows", function (req, res) {
 //document.querySelector("#show-episodes > div > div > div:nth-child(5) > div > div > a")
 
 app.get("/watch/:num/:name", (req, res) => {
-    let url =
-        "https://akwam.to/shows/" + req.params.num + "/" + req.params.name;
-    console.log(url);
-    let src = url;
-    if (src.includes("nxt")) {
-        src = src
-            .replace(/[0-9]/g, "")
-            .replace("https://akwam.to/shows/", "")
-            .replace("/wwe-nxt", "");
-        url = url.replace(src[0], "%20");
-    }
-
-    console.log("Video Process Started");
-    //Getting the url shortner page
-    request(url, function (error, response, html) {
-        let shows = [];
-        if (!error) {
-            console.log("1/3");
-            var $ = cheerio.load(html);
-            let link = $(".link-show").attr("href");
-            /* This link can be empty if the page has multiple shows so
-			I have to call another function here if it returns empty */
-
-            /****** GETTING VIDEO PAGE STARTS *******/
-            request(link, function (error, response, html) {
-                let shows = [];
-                if (!error) {
-                    var $ = cheerio.load(html);
-                    let videopagelink = $(".download-link").attr("href");
-                    console.log("2/3");
-
-                    /****** GETTING VIDEO LINK STARTS *******/
-                    request(videopagelink, function (error, response, html) {
-                        let shows = [];
-                        if (!error) {
-                            var $ = cheerio.load(html);
-                            let videosLinks = [];
-                            $("video")
-                                .children()
-                                .each(function (index, item) {
-                                    let link = $(item).attr("src");
-                                    let size = $(item).attr("size");
-                                    videosLinks.push({
-                                        size: size,
-                                        link: link,
-                                    });
-                                });
-                            console.log("3/3");
-                            res.send({
-                                videos: videosLinks,
-                            });
-                        }
-                    });
-                    /****** GETTING VIDEO LINK ENDS *******/
-                }
-            });
-
-            /****** GETTING VIDEO PAGE ENDS *******/
-        } else {
-            res.send(hehe);
+    let ref = req.headers.referer || "REFERRER";
+    let ver = req.query.ver;
+    if (!ref.includes("watchwrestling.vercel.app") && ver != "admin") {
+        res.sendStatus(403);
+    } else {
+        let url =
+            "https://akwam.to/shows/" + req.params.num + "/" + req.params.name;
+        console.log(url);
+        let src = url;
+        if (src.includes("nxt")) {
+            src = src
+                .replace(/[0-9]/g, "")
+                .replace("https://akwam.to/shows/", "")
+                .replace("/wwe-nxt", "");
+            url = url.replace(src[0], "%20");
         }
-    });
+
+        console.log("Video Process Started");
+        //Getting the url shortner page
+        request(url, function (error, response, html) {
+            let shows = [];
+            if (!error) {
+                console.log("1/3");
+                var $ = cheerio.load(html);
+                let link = $(".link-show").attr("href");
+                /* This link can be empty if the page has multiple shows so
+                I have to call another function here if it returns empty */
+
+                /****** GETTING VIDEO PAGE STARTS *******/
+                request(link, function (error, response, html) {
+                    let shows = [];
+                    if (!error) {
+                        var $ = cheerio.load(html);
+                        let videopagelink = $(".download-link").attr("href");
+                        console.log("2/3");
+
+                        /****** GETTING VIDEO LINK STARTS *******/
+                        request(
+                            videopagelink,
+                            function (error, response, html) {
+                                let shows = [];
+                                if (!error) {
+                                    var $ = cheerio.load(html);
+                                    let videosLinks = [];
+                                    let downloadLinks = [];
+                                    $("video")
+                                        .children()
+                                        .each(function (index, item) {
+                                            let link = $(item).attr("src");
+                                            let size = $(item).attr("size");
+                                            videosLinks.push({
+                                                size: size,
+                                                link: link,
+                                            });
+                                            downloadLinks.push({
+                                                size: size,
+                                                link: generateDownloadLink(
+                                                    link
+                                                ),
+                                            });
+                                        });
+                                    console.log("3/3");
+                                    res.send({
+                                        videos: videosLinks,
+                                        downloads: downloadLinks,
+                                    });
+                                }
+                            }
+                        );
+                        /****** GETTING VIDEO LINK ENDS *******/
+                    }
+                });
+
+                /****** GETTING VIDEO PAGE ENDS *******/
+            } else {
+                res.send(hehe);
+            }
+        });
+    }
+});
+
+const generateDownloadLink = (reqURL) => {
+    let url = reqURL;
+    url = url.replace("https://", "").replace("akwam.link", "");
+    let i = 0;
+    a = "";
+    let domain = "";
+    while (a != ".") {
+        domain += url[i];
+        i++;
+        a = url[i];
+    }
+    url = url
+        .replace(domain, "")
+        .replace("./download/", "download")
+        .replace("/", "~")
+        .replace(
+            "download",
+            "https://watchwrestling.vercel.app/download/" + domain + "/"
+        );
+    return url;
+};
+
+app.get("/download/:domain/:link/:name", (req, res) => {
+    let domain = req.params.domain;
+    let link = req.params.link.replace("~", "/");
+    let name = req.params.name;
+    let url = "http://" + domain + ".akwam.link/download/" + link + "/" + name;
+    request(url).pipe(res);
 });
 
 // app.get("/:file", (req, res) => {
