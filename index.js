@@ -190,6 +190,8 @@ app.get("/watch/:num/:name", (req, res) => {
                                 if (!error) {
                                     var $ = cheerio.load(html);
                                     let videosLinks = [];
+                                    
+                                    let downloadLinks = [];
                                     $("video")
                                         .children()
                                         .each(function (index, item) {
@@ -199,10 +201,17 @@ app.get("/watch/:num/:name", (req, res) => {
                                                 size: size,
                                                 link: link,
                                             });
+                                            downloadLinks.push({
+                                                size: size,
+                                                link: generateDownloadLink(
+                                                    link
+                                                ),
+                                            });
                                         });
                                     console.log("3/3");
                                     res.send({
                                         videos: videosLinks,
+                                        downloads: downloadLinks,
                                     });
                                 }
                             }
@@ -218,6 +227,37 @@ app.get("/watch/:num/:name", (req, res) => {
         });
     }
 });
+
+const generateDownloadLink = (reqURL) => {
+    let url = reqURL;
+    url = url.replace("https://", "").replace("akwam.link", "");
+    let i = 0;
+    a = "";
+    let domain = "";
+    while (a != ".") {
+        domain += url[i];
+        i++;
+        a = url[i];
+    }
+    url = url
+        .replace(domain, "")
+        .replace("./download/", "download")
+        .replace("/", "~")
+        .replace(
+            "download",
+            "https://watchwrestling.vercel.app/download/" + domain + "/"
+        );
+    return url;
+};
+
+app.get("/download/:domain/:link/:name", (req, res) => {
+    let domain = req.params.domain;
+    let link = req.params.link.replace("~", "/");
+    let name = req.params.name;
+    let url = "http://" + domain + ".akwam.link/download/" + link + "/" + name;
+    request(url).pipe(res);
+});
+
 
 // start the server listening for requests
 app.listen(process.env.PORT || 9000, () => {
