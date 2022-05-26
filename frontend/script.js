@@ -58,7 +58,7 @@ const startPlayer = (src, img, title) => {
         },
     });
     $.ajax({
-        url: "https://watchwrestling.vercel.app/watch?v=" + src,
+        url: src,
         success: function (data) {
             window.scrollTo(0, 0);
             $("#vid").show();
@@ -105,7 +105,7 @@ const playVideo = (videos, img) => {
 };
 
 const goBack = () => {
-    $("#playerContainer").html("");
+    $("#plyr-container").html("");
     $("#vid").hide();
     $("#main").show();
     $("#more").show();
