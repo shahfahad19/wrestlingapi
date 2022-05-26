@@ -1,5 +1,5 @@
 // Choose a cache name
-const cacheName = "urdu-news-cache-v2";
+const cacheName = "watch-wrestling-cache";
 // List the files to precache
 const precacheResources = [
     "/",
