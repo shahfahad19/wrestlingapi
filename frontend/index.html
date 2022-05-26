@@ -4,6 +4,66 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Watch Wrestling</title>
+        <link rel="manifest" href="manifest.json" />
+
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="application-name" content="Watch Wrestling" />
+        <meta name="apple-mobile-web-app-title" content="Watch Wrestling" />
+        <meta name="msapplication-starturl" content="/" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1, shrink-to-fit=no"
+        />
+
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="192x192"
+            href="/imgs/192.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            type="image/png"
+            sizes="192x192"
+            href="/imgs/192.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="256x256"
+            href="/imgs/256.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            type="image/png"
+            sizes="256x256"
+            href="/imgs/256.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="384x384"
+            href="/imgs/384.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            type="image/png"
+            sizes="384x384"
+            href="/imgs/384.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="512x512"
+            href="/imgs/512.png"
+        />
+        <link
+            rel="apple-touch-icon"
+            type="image/png"
+            sizes="512x512"
+            href="/imgs/512.png"
+        />
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
@@ -14,8 +74,8 @@
             type="text/javascript"
             src="https://code.jquery.com/jquery-3.6.0.min.js"
         ></script>
-        <link rel="stylesheet" href="https://cdn.plyr.io/3.7.2/plyr.css" />
-        <script src="./script.js"></script>
+        <link rel="stylesheet" href="./res/plyr.css" />
+        <script src="./res/script.js"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.16/dist/sweetalert2.all.min.js"
             defer
@@ -61,6 +121,21 @@
             <div id="plyr-container" class="m-2 text-center"></div>
             <div id="download-btns"></div>
         </div>
-        <script src="https://cdn.plyr.io/3.7.2/plyr.js"></script>
+        <script src="res/plyr.js"></script>
+        <script>
+            "serviceWorker" in navigator &&
+                window.addEventListener("load", function () {
+                    navigator.serviceWorker.register("./res/sw.js").then(
+                        function (e) {
+                            console.log(
+                                "ServiceWorker registration successfull"
+                            );
+                        },
+                        function (e) {
+                            console.log("ServiceWorker registration failed");
+                        }
+                    );
+                });
+        </script>
     </body>
 </html>
