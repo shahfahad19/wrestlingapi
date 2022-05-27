@@ -210,8 +210,7 @@ app.get("/watch/:num/:name", (req, res) => {
                                         });
                                     console.log("3/3");
                                     res.send({
-                                        videos: videosLinks,
-                                        downloads: downloadLinks,
+                                        videos: downloadLinks
                                     });
                                 }
                             }
@@ -222,7 +221,7 @@ app.get("/watch/:num/:name", (req, res) => {
 
                 /****** GETTING VIDEO PAGE ENDS *******/
             } else {
-                res.send(hehe);
+                res.sendStatus(404);
             }
         });
     }
